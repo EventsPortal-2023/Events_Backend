@@ -17,7 +17,7 @@ from rest_framework.authtoken.models import Token
 from django.contrib.auth import authenticate, login
 from rest_framework import status
 
-# Create your views here.
+# Create your views here
 
 class UserRegistrationAPI(GenericAPIView):
     serializer_class = UserSerializer

@@ -38,3 +38,25 @@ class User(AbstractBaseUser):
         "Is the user a member of staff?"
         # Simplest possible answer: All admins are staff
         return self.is_admin
+
+class UserProfile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    bio = models.TextField(blank=True,null=True,max_length=100)
+
+    def __str__(self):
+        return self.user.username
+
+class Faculty(models.Model):
+    user = models.ForeignKey(User, on_delete=models.PROTECT)
+    faculty_name = models.CharField(max_length=255,blank=True,null=True)
+
+    def __str__(self):
+        return f"{self.user.username} - {self.faculty_name}"
+
+class Member(models.Model):
+    user = models.ForeignKey(User, on_delete=models.PROTECT)
+    member = models.CharField(max_length=255,blank=True,null=True)
+
+    def __str__(self):
+        return f"{self.user.username} - {self.member}"
+    

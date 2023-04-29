@@ -1,4 +1,4 @@
-from .models import User
+from .models import User,UserProfile,Faculty,Member
 from rest_framework import serializers
 from django.contrib.auth import authenticate
 
@@ -31,3 +31,18 @@ class UserSerializer(serializers.ModelSerializer):
 class LoginSerializer(serializers.Serializer):
     username = serializers.CharField(max_length=150)
     password = serializers.CharField(max_length=128, write_only=True)
+
+class UserProfileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = UserProfile
+        fields = ('bio')
+
+class FacultySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Faculty
+        fields = ('id', 'faculty_name')
+
+class MemberSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Member
+        fields = ('id', 'member')

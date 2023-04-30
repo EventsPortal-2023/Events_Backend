@@ -35,7 +35,7 @@ class Eventmixin(
     generics.GenericAPIView
 ):
         queryset = Events.objects.all()
-        serializer = EventSerializer(queryset, many=True)
+        serializer_class = EventSerializer
 
         def put(self, request, *args,**kwargs):
             try:
@@ -87,7 +87,7 @@ class Photomixin(
     generics.GenericAPIView
 ):
         queryset = Photo.objects.all()
-        serializer = PhotoSerializer(queryset, many=True)
+        serializer_class = PhotoSerializer
 
         def put(self, request, *args,**kwargs):
             try:
@@ -128,7 +128,7 @@ class EventLikesmixin(
     generics.GenericAPIView
 ):
         queryset = EventLikes.objects.all()
-        serializer = LikeSerializer(queryset, many=True)
+        serializer_class = LikeSerializer
 
         def put(self, request, *args,**kwargs):
             try:

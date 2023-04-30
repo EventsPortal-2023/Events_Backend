@@ -48,6 +48,8 @@ INSTALLED_APPS = [
 
     'loginreg',
     'api',
+
+    'django_filters',
 ]
 
 MIDDLEWARE = [

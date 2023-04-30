@@ -37,6 +37,10 @@ class Photo(models.Model):
         return self.event.title + "_" + self.desc
 
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> d76482f749f2574f81e72fefd0ecc8be4c60e293
 # a model to store the likes by users
 class EventLikes(models.Model):
     event = models.ForeignKey(Events, on_delete=models.CASCADE)

@@ -17,3 +17,7 @@ class LikeSerializer(serializers.ModelSerializer):
         model = EventLikes
         fields = '__all__'
 
+class FavSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Favourite
+        fields = '__all__'

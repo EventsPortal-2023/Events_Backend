@@ -5,3 +5,4 @@ from .models import *
 admin.site.register(Events)
 admin.site.register(EventLikes)
 admin.site.register(Photo)
+admin.site.register(Favourite)

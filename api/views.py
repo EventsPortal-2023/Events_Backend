@@ -8,6 +8,8 @@ from rest_framework.views import APIView
 from rest_framework import status
 from rest_framework import filters
 
+
+
 #views to list, create and delete new events
 class EventList(APIView):
     def get(self, request, format=None):
@@ -28,7 +30,6 @@ class EventList(APIView):
         queryset.delete()
         return Response(queryset.data)
     
-
 class Eventmixin(
     mixins.UpdateModelMixin,
     mixins.DestroyModelMixin,
@@ -60,6 +61,8 @@ class EventListSearch(generics.ListAPIView):
 # http://127.0.0.1:8000/evt/Eventsearch/?eventVenue=vile parle
 # http://127.0.0.1:8000/evt/Eventsearch/?eventDate=2023-04-30
 # http://127.0.0.1:8000/evt/Eventsearch/?search=5
+
+
 
 #views to list, create and delete new photos
 class PhotoList(APIView):
@@ -101,6 +104,8 @@ class Photomixin(
             except Events.DoesNotExist:
                 raise Http404
 
+
+
 #views to list, create and delete new event likes
 class EventLikesList(APIView):
     def get(self, request, format=None):
@@ -121,7 +126,6 @@ class EventLikesList(APIView):
         queryset.delete()
         return Response(queryset.data)
     
-
 class EventLikesmixin(
     mixins.UpdateModelMixin,
     mixins.DestroyModelMixin,
@@ -129,6 +133,49 @@ class EventLikesmixin(
 ):
         queryset = EventLikes.objects.all()
         serializer = LikeSerializer(queryset, many=True)
+
+        def put(self, request, *args,**kwargs):
+            try:
+                return self.update(request, *args, **kwargs)
+            except Events.DoesNotExist:
+                raise Http404
+            
+        def delete(self, request, *args, **kwargs):
+            try:
+                return self.destroy(request, *args, **kwargs)
+            except Events.DoesNotExist:
+                raise Http404
+            
+
+
+#views to list, create and delete new favs
+class FavouriteList(APIView):
+    def get(self, request, format=None):
+        queryset = Favourite.objects.all()
+        serializer = FavSerializer(queryset, many=True)
+
+        return Response(serializer.data, safe=True)
+
+    def post(self, request, format=None):
+        serializer = FavSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED, safe=False)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST, safe=False)
+    
+    def delete(self, request):
+        queryset=request.data
+        queryset = EventLikes.objects.get(id)
+        queryset.delete()
+        return Response(queryset.data)
+    
+class Favouritemixin(
+    mixins.UpdateModelMixin,
+    mixins.DestroyModelMixin,
+    generics.GenericAPIView
+):
+        queryset = Favourite.objects.all()
+        serializer = FavSerializer(queryset, many=True)
 
         def put(self, request, *args,**kwargs):
             try:

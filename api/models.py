@@ -46,3 +46,12 @@ class EventLikes(models.Model):
     class Meta:
         verbose_name = "EventLikes"
         verbose_name_plural = "EventLikes"
+
+#to select their fav(ones they wish to attend) events
+class Favourite(models.Model):
+    event = models.ForeignKey(Events, on_delete=models.CASCADE)
+    student = models.ForeignKey(User, on_delete=models.CASCADE)
+
+    class Meta:
+        verbose_name = "Favourite"
+        verbose_name_plural = "FAVS"

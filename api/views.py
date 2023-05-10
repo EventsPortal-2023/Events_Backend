@@ -12,32 +12,31 @@ from rest_framework import filters
 
 #views to list, create and delete new events
 class EventList(APIView):
-    def get(self, request, format=None):
+    def get(self, request):
         queryset = Events.objects.all()
         serializer = EventSerializer(queryset, many=True)
         return Response(serializer.data)
 
-    def post(self, request, format=None):
+    def post(self, request):
         serializer = EventSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
    
-    def delete(self, request):
-        queryset=request.data
-        queryset = Events.objects.get(id)
-        queryset.delete()
-        return Response(queryset.data)
     
 class Eventmixin(
+    mixins.RetrieveModelMixin,
     mixins.UpdateModelMixin,
     mixins.DestroyModelMixin,
     generics.GenericAPIView
 ):
+        serializer_class = EventSerializer
         queryset = Events.objects.all()
-        serializer = EventSerializer(queryset, many=True)
 
+        def get(self, request, *args,**kwargs):
+            return self.retrieve(request, *args, **kwargs)
+       
         def put(self, request, *args,**kwargs):
             try:
                 return self.update(request, *args, **kwargs)
@@ -78,19 +77,18 @@ class PhotoList(APIView):
             return Response(serializer.data, status=status.HTTP_201_CREATED, safe=False)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST, safe=False)
     
-    def delete(self, request):
-        queryset=request.data
-        queryset = Photo.objects.get(id)
-        queryset.delete()
-        return Response(queryset.data)
     
 class Photomixin(
+    mixins.RetrieveModelMixin,
     mixins.UpdateModelMixin,
     mixins.DestroyModelMixin,
     generics.GenericAPIView
 ):
         queryset = Photo.objects.all()
-        serializer = PhotoSerializer(queryset, many=True)
+        serializer_class = PhotoSerializer
+
+        def get(self, request, *args,**kwargs):
+            return self.retrieve(request, *args, **kwargs)
 
         def put(self, request, *args,**kwargs):
             try:
@@ -120,20 +118,19 @@ class EventLikesList(APIView):
             return Response(serializer.data, status=status.HTTP_201_CREATED, safe=False)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST, safe=False)
     
-    def delete(self, request):
-        queryset=request.data
-        queryset = EventLikes.objects.get(id)
-        queryset.delete()
-        return Response(queryset.data)
     
 class EventLikesmixin(
+    mixins.RetrieveModelMixin,
     mixins.UpdateModelMixin,
     mixins.DestroyModelMixin,
     generics.GenericAPIView
 ):
         queryset = EventLikes.objects.all()
-        serializer = LikeSerializer(queryset, many=True)
+        serializer_class = LikeSerializer
 
+        def get(self, request, *args,**kwargs):
+            return self.retrieve(request, *args, **kwargs)
+        
         def put(self, request, *args,**kwargs):
             try:
                 return self.update(request, *args, **kwargs)
@@ -154,28 +151,27 @@ class FavouriteList(APIView):
         queryset = Favourite.objects.all()
         serializer = FavSerializer(queryset, many=True)
 
-        return Response(serializer.data, safe=True)
+        return Response(serializer.data)
 
     def post(self, request, format=None):
         serializer = FavSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED, safe=False)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST, safe=False)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
-    def delete(self, request):
-        queryset=request.data
-        queryset = EventLikes.objects.get(id)
-        queryset.delete()
-        return Response(queryset.data)
     
 class Favouritemixin(
+    mixins.RetrieveModelMixin,
     mixins.UpdateModelMixin,
     mixins.DestroyModelMixin,
     generics.GenericAPIView
 ):
         queryset = Favourite.objects.all()
-        serializer = FavSerializer(queryset, many=True)
+        serializer_class = FavSerializer
+
+        def get(self, request, *args,**kwargs):
+            return self.retrieve(request, *args, **kwargs)
 
         def put(self, request, *args,**kwargs):
             try:

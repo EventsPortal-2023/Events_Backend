@@ -1,0 +1,6 @@
+env/
+api/__pycache__
+api/migrations/
+loginreg/__pycache__
+loginreg/migrations/
+core/__pycache__

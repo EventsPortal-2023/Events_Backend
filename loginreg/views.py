@@ -1,22 +1,13 @@
-from django.shortcuts import render
 from rest_framework.generics import GenericAPIView
-from rest_framework.views import APIView
 from .models import User,Faculty,Member
-from .serializers import UserSerializer,LoginSerializer,MemberSerializer,FacultySerializer
+from .serializers import UserSerializer,MemberSerializer,FacultySerializer
 from rest_framework.response import Response
 from rest_framework_simplejwt.tokens import RefreshToken
-from rest_framework_simplejwt.authentication import JWTAuthentication
-from uuid import uuid4
-from django.core.mail import send_mail
-from django.conf import settings
-from django.http import HttpResponse
-from rest_framework.permissions import IsAuthenticated
 from rest_framework.permissions import AllowAny
-from rest_framework.authentication import SessionAuthentication
-from rest_framework.authtoken.models import Token
-from django.contrib.auth import authenticate, login
 from rest_framework import status,generics
-from django.contrib.auth import get_user_model
+from .serializers import MyTokenObtainPairSerializer
+from rest_framework.permissions import AllowAny
+from rest_framework_simplejwt.views import TokenObtainPairView
 
 # Create your views here
 
@@ -32,18 +23,14 @@ class UserRegistrationAPI(GenericAPIView):
         refresh = RefreshToken.for_user(user)
         return Response({'status': 200, 'payload' : {"User username" : user.username , "User id" : user.id},'message' : 'Registration Successful', 'refresh': str(refresh), 'access': str(refresh.access_token)})
     
-class UserLoginView(APIView):
-    # permission_classes = [AllowAny]
-    serializer_class = UserSerializer
+class UserLoginView(TokenObtainPairView):
+    permission_classes = (AllowAny,)
+    serializer_class = MyTokenObtainPairSerializer
 
-    def post(self, request):
-        serializer = self.serializer_class(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        return Response(serializer.validated_data, status=status.HTTP_200_OK)
 
 class UserEditView(generics.RetrieveUpdateAPIView):
     serializer_class = UserSerializer
-    queryset = Faculty.objects.all()
+    queryset = User.objects.all()
 
     def get_object(self):
         username = self.kwargs.get('username')

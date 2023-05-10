@@ -54,4 +54,4 @@ class Favourite(models.Model):
 
     class Meta:
         verbose_name = "Favourite"
-        verbose_name_plural = "FAVS"
+        verbose_name_plural = "Favourite"

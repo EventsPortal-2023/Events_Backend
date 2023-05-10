@@ -1,6 +1,16 @@
 from .models import User,UserProfile,Faculty,Member
 from rest_framework import serializers
 from django.contrib.auth import authenticate
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+
+
+class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
+
+    @classmethod
+    def get_token(cls, user):
+        token = super(MyTokenObtainPairSerializer, cls).get_token(user)
+        token['username'] = user.username
+        return token
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
@@ -28,9 +38,6 @@ class UserSerializer(serializers.ModelSerializer):
         user.save()
         return user
 
-class LoginSerializer(serializers.Serializer):
-    username = serializers.CharField(max_length=150)
-    password = serializers.CharField(max_length=128, write_only=True)
 
 class UserProfileSerializer(serializers.ModelSerializer):
     class Meta:
@@ -46,3 +53,4 @@ class MemberSerializer(serializers.ModelSerializer):
     class Meta:
         model = Member
         fields = ('id', 'member')
+

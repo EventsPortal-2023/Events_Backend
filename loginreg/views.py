@@ -1,6 +1,6 @@
 from rest_framework.generics import GenericAPIView
 from .models import User,Faculty,Member
-from .serializers import UserSerializer,MemberSerializer,FacultySerializer
+from .serializers import UserSerializer,MemberSerializer,FacultySerializer,UserLoginSerializer
 from rest_framework.response import Response
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.permissions import AllowAny
@@ -8,8 +8,24 @@ from rest_framework import status,generics
 from .serializers import MyTokenObtainPairSerializer
 from rest_framework.permissions import AllowAny
 from rest_framework_simplejwt.views import TokenObtainPairView
+from rest_framework import status
+
+from rest_framework.decorators import api_view, permission_classes
 
 # Create your views here
+@api_view(['POST'])
+def test(request):
+    data = request.data
+    serializer = UserLoginSerializer(data=data)
+    if serializer.is_valid():
+        user = User.objects.get(username=data['username'])
+        if user:
+            if user.check_password(data['password']):
+                print(user)
+                log_serializer = UserSerializer(user)
+                return Response(log_serializer.data,status=status.HTTP_201_CREATED)
+        return Response("Error",status=status.HTTP_404_NOT_FOUND)
+    return Response(serializer.data,status=status.HTTP_404_NOT_FOUND)
 
 class UserRegistrationAPI(GenericAPIView):
     serializer_class = UserSerializer

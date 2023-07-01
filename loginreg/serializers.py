@@ -12,6 +12,20 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
         token['username'] = user.username
         return token
 
+class UserLoginSerializer(serializers.Serializer):
+    username = serializers.CharField(max_length=180)
+    password = serializers.CharField(max_length=180)
+
+    def validate(self, attrs):
+        username = attrs.get('username')
+        user = User.objects.filter(username=username)
+        if user:
+            return attrs
+        else:
+            msg={
+                'detail': 'User does not exists.', 'register': True}
+            raise serializers.ValidationError(msg, code='authorization')
+
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User

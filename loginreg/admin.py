@@ -5,3 +5,4 @@ from .models import *
 admin.site.register(User)
 admin.site.register(Faculty)
 admin.site.register(Member)
+admin.site.register(Committee)

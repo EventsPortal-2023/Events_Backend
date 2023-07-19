@@ -4,11 +4,14 @@ from .managers import UserManager
 
 # Create your models here.
 
+class Committee(models.Model):
+    name = models.CharField(max_length=255, blank=False, null=False)
+    follower_count = models.IntegerField(default=0, blank=True, null=True)
 
 class User(AbstractBaseUser):
     username = models.CharField(max_length=100, unique=True)
     sapid=models.CharField(blank=True,null=True,max_length=11,unique=True,default=None)
-    committee=models.CharField(blank=True,null=True,max_length=50,unique=True,default=None)
+    committee=models.ForeignKey(Committee, on_delete=models.PROTECT, blank=True, null=True)
     college=models.CharField(blank=True,null=True,max_length=100,default=None)
     is_active = models.BooleanField(default=True)
     is_admin = models.BooleanField(default=False)

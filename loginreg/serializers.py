@@ -1,4 +1,4 @@
-from .models import User,UserProfile,Faculty,Member
+from .models import User,UserProfile,Faculty,Member,Committee
 from rest_framework import serializers
 from django.contrib.auth import authenticate
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
@@ -68,3 +68,7 @@ class MemberSerializer(serializers.ModelSerializer):
         model = Member
         fields = ('id', 'member')
 
+class CommitteeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Committee
+        fields = ('id', 'name')

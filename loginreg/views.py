@@ -1,6 +1,7 @@
 from rest_framework.generics import GenericAPIView
-from .models import User,Faculty,Member
-from .serializers import UserSerializer,MemberSerializer,FacultySerializer,UserLoginSerializer
+from rest_framework.views import APIView
+from .models import User,Faculty,Member,Committee
+from .serializers import UserSerializer,MemberSerializer,FacultySerializer,UserLoginSerializer,CommitteeSerializer
 from rest_framework.response import Response
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.permissions import AllowAny
@@ -89,3 +90,16 @@ class MemberCreateView(generics.CreateAPIView):
         member.save()
 
         return Response({'status': 201, 'payload': serializer.data, 'message': 'Committee member added successfully.'}, status=status.HTTP_201_CREATED)
+    
+class CommitteeList(APIView):
+    def get(self, request):
+        queryset = Committee.objects.all()
+        serializer = CommitteeSerializer(queryset, many=True)
+        return Response(serializer.data)
+
+    def post(self, request):
+        serializer = CommitteeSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

@@ -64,43 +64,7 @@ class EventListSearch(generics.ListAPIView):
 
 
 #views to list, create and delete new photos
-class PhotoList(APIView):
-    def get(self, request, format=None):
-        queryset = Photo.objects.all()
-        serializer = PhotoSerializer(queryset, many=True)
-        return Response(serializer.data, safe=False)
 
-    def post(self, request, format=None):
-        serializer = PhotoSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED, safe=False)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST, safe=False)
-    
-    
-class Photomixin(
-    mixins.RetrieveModelMixin,
-    mixins.UpdateModelMixin,
-    mixins.DestroyModelMixin,
-    generics.GenericAPIView
-):
-        queryset = Photo.objects.all()
-        serializer_class = PhotoSerializer
-
-        def get(self, request, *args,**kwargs):
-            return self.retrieve(request, *args, **kwargs)
-
-        def put(self, request, *args,**kwargs):
-            try:
-                return self.update(request, *args, **kwargs)
-            except Events.DoesNotExist:
-                raise Http404
-            
-        def delete(self, request, *args, **kwargs):
-            try:
-                return self.destroy(request, *args, **kwargs)
-            except Events.DoesNotExist:
-                raise Http404
 
 
 

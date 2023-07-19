@@ -6,8 +6,13 @@ from .managers import UserManager
 
 class Committee(models.Model):
     name = models.CharField(max_length=255, blank=False, null=False)
+    image = models.ImageField(upload_to='commitee/')
+    desc = models.CharField(max_length=200,null=True,blank=True)
     follower_count = models.IntegerField(default=0, blank=True, null=True)
 
+    def __str__(self) -> str:
+        return str(self.name)
+    
 class User(AbstractBaseUser):
     username = models.CharField(max_length=100, unique=True)
     sapid=models.CharField(blank=True,null=True,max_length=11,unique=True,default=None)

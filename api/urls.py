@@ -9,9 +9,6 @@ urlpatterns = [
 
     path('Eventsearch/', views.EventListSearch.as_view(), name="Events"),
 
-    path('photos/', views.PhotoList.as_view(), name="Events"),
-    path('photos/<int:pk>', views.Photomixin.as_view(), name="Events"),
-
     path('Likes/', views.EventLikesList.as_view(), name = "Likes"),
     path('Likes/<int:pk>', views.EventLikesmixin.as_view(), name="Likes"),
 

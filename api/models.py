@@ -5,6 +5,13 @@ from phonenumber_field.modelfields import PhoneNumberField
 
 # a model to store the data for the events 
 class Events(models.Model):
+    CHOICES = [
+        ("S", "small"),
+        ("M", "Mdeium"),
+        ("L", "Large"),
+        ("XL", "Extra large"),
+     ]
+    main_img = models.ImageField(upload_to="events/imag/")
     eventDescription = models.TextField()
     eventSummary = models.CharField(max_length=500)
     eventtitle= models.CharField(max_length=100)
@@ -28,13 +35,12 @@ class Events(models.Model):
 
 
 # model for the gallery in events
-class Photo(models.Model):  
-    id = models.IntegerField(primary_key=True)
-    event = models.ForeignKey(Events, on_delete=models.CASCADE)
-    desc = models.TextField()
+class EventsImage(models.Model):
+    image = models.ImageField(upload_to="events/imag/")
+    image_fk = models.ForeignKey(Events,on_delete=models.CASCADE)
 
-    def __str__(self):
-        return self.event.title + "_" + self.desc
+    def __str__(self) -> str:
+        return self.image_fk.eventtitle +' '+ str(self.id)
 
 
 
